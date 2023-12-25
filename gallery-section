@@ -29,10 +29,10 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (max-width: 767px) {
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
     }
   }
   #gallery{
@@ -52,6 +52,11 @@
     -webkit-transition: all 0.2s;
     transition: all 0.2s;
     cursor: zoom-in ;
+  }
+  @media (max-width:991px){
+ #gallery{
+    column-count:2;
+  }
   }
 {%- endstyle -%}
 
@@ -135,6 +140,10 @@
   "label": "t:sections.featured-collection.settings.full_width.label",
   "default": false
   },
+  {
+    "type": "header",
+    "content": "Padding(Desktop)"
+  },
    {
     "type": "range",
     "id": "padding_top",
@@ -142,7 +151,7 @@
     "max": 100,
     "step": 4,
     "unit": "px",
-    "label": "column-count",
+    "label": "Padding Top",
     "default": 36
   },
   {
@@ -152,7 +161,31 @@
     "max": 100,
     "step": 4,
     "unit": "px",
-    "label": "t:sections.all.padding.padding_bottom",
+    "label": "Padding Bottom",
+    "default": 36
+  },
+  {
+    "type": "header",
+    "content": "Padding(mobile)"
+  },
+   {
+    "type": "range",
+    "id": "padding_top_mobile",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom_mobile",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Bottom",
     "default": 36
   }
   ],
