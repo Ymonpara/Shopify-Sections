@@ -1,0 +1,178 @@
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.0/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+ <!-- fancybox -->
+
+<div class="color-{{ section.settings.color_scheme }} isolate gradient">
+  <div class="section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width {% else %} page-width {% endif %}">
+    {%- if section.settings.title != blank -%}
+      <h2 class="{{ section.settings.heading_size }} text-{{ section.settings.text-alignment }}">
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+    <div id="gallery" class="container-fluid">  
+      {%- for block in section.blocks -%}
+        {% if block.settings.image_with_text_image != blank %}
+          <a data-fancybox="mixed" class="demo" href="{{ block.settings.image_with_text_image | image_url: width: 1500 }}">
+            {{ block.settings.image_with_text_image | image_url: width: 1500 | image_tag }}
+          </a>
+        {% endif %}  
+      {%- endfor -%}
+    </div>
+  </div>
+</div>  
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #gallery{
+    -webkit-column-count:{{ section.settings.column-count }};
+    -moz-column-count: {{ section.settings.column-count }};
+    column-count:{{ section.settings.column-count }};
+    -webkit-column-gap:20px;
+    -moz-column-gap:20px;
+    column-gap:20px;
+  }
+  
+  #gallery img {
+    width:100%;
+    height:auto;
+    margin: 2% auto;
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    cursor: zoom-in ;
+  }
+{%- endstyle -%}
+
+<script>
+  	$('.demo').fancybox({
+		buttons : [
+			'slideShow',
+			'close'
+		],
+		slideShow : {
+			autoStart : false
+		}
+	});
+</script>
+
+{% schema %}
+{
+  "name": "Gallery",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+  {
+    "type": "text",
+    "id": "title",
+    "default": "Featured collection",
+    "label": "t:sections.featured-collection.settings.title.label"
+  },
+  {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+      {
+        "value": "h3",
+        "label": "t:sections.all.heading_size.options__1.label"
+      },
+      {
+        "value": "h2",
+        "label": "t:sections.all.heading_size.options__2.label"
+      },
+      {
+        "value": "h1",
+        "label": "t:sections.all.heading_size.options__3.label"
+      }
+    ],
+    "default": "h1",
+    "label": "t:sections.all.heading_size.label"
+  },
+  {
+    "type": "select",
+    "id": "text-alignment",
+    "label": "Text Alignment",
+    "options": [
+      {
+        "value": "left",
+        "label": "Left"
+      },
+      {
+        "value": "center",
+        "label": "Center"
+      },
+      {
+        "value": "right",
+        "label": "Right"
+      }
+    ],
+    "default": "left"
+  },
+  {
+    "type": "range",
+    "id": "column-count",
+    "min": 0,
+    "max": 5,
+    "step": 1,
+    "unit": "no",
+    "label": "Column Count",
+    "default": 3
+  },
+  {
+  "type": "checkbox",
+  "id": "full_width",
+  "label": "t:sections.featured-collection.settings.full_width.label",
+  "default": false
+  },
+   {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "column-count",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_bottom",
+    "default": 36
+  }
+  ],
+  "blocks" : [
+    {
+      "type": "heading",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_with_text_image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gallery"
+    }
+  ]
+}
+{% endschema %}
