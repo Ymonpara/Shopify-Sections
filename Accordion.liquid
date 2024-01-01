@@ -20,15 +20,15 @@
 <div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
   <h1>accordion with jquery</h1>
   <div class="container">
-    <div id="accordion" class="accordion-container">
+    <div id="accordion" class="acc-container">
       {% for block in section.blocks %}
-        <div class="accordion-item">
-          <div class="accordion-title js-accordion-title">
+        <div class="acc">
+          <div class="acc-head">
             <h2>
               {{ block.settings.title }}
             </h2>
           </div>
-          <div class="accordion-content">
+          <div class="acc-content">
             <p>{{ block.settings.text }}</p>
           </div>
         </div>
@@ -37,39 +37,75 @@
   </div>
 
   <style>
-	.accordion-container .accordion-title {
+
+
+.acc {
+  margin-bottom: 10px;
+}
+
+.acc-head {
+  padding: 15px 10px;
+  font-size: 22px;
   position: relative;
   cursor: pointer;
-}
-.accordion-container .accordion-title::after {
-  content: "";
+ }
+
+ .acc-head::before,
+ .acc-head::after {
+  content: '';
   position: absolute;
-  top: 25px;
-  right: 25px;
-  width: 0;
-  height: 0;
-  border: 8px solid transparent;
-  border-top-color: #000;
+  top: 50%;
+  background-color: #000;
+  transition: all .3s;
+ }
+
+ .acc-head::before {
+  right: 30px;
+  width: 3px;
+  height: 20px;
+  margin-top: -10px;
 }
-.accordion-container .accordion-title.open::after {
-  content: "";
-  position: absolute;
-  top: 15px;
-  border: 8px solid transparent;
-  border-bottom-color: #000;
+
+.acc-head::after {
+  right: 21px;
+  width: 20px;
+  height: 3px;
+  margin-top: -2px;
 }
+
+.acc-head p {
+  color: #fff;
+  font-weight: bold;
+}
+
+.acc-content {
+  padding: 15px 10px;
+  display: none;
+}
+        
+.acc-head.active::before {
+    transform: rotate(90deg);
+}
+
   </style>
 </div>
 
 <script>
-	$(function () {
-  $(".accordion-content:not(:first-of-type)").css("display", "none");
-  $(".accordion-item:nth-child(1) .accordion-content:not(:first-of-type)").css("display", "block");
-  $(".accordion-item:nth-child(1) .js-accordion-title").addClass("open");
-  $(".js-accordion-title").click(function () {
-    $(".open").not(this).removeClass("open").next().slideUp(300);
-    $(this).toggleClass("open").next().slideToggle(300);
-  });
+$(document).ready(function() {
+$('.acc-container .acc:nth-child(1) .acc-head').addClass('active');
+$('.acc-container .acc:nth-child(1) .acc-content').slideDown();
+$('.acc-head').on('click', function() {
+    if($(this).hasClass('active')) {
+      $(this).siblings('.acc-content').slideUp();
+      $(this).removeClass('active');
+    }
+    else {
+      $('.acc-content').slideUp();
+      $('.acc-head').removeClass('active');
+      $(this).siblings('.acc-content').slideToggle();
+      $(this).toggleClass('active');
+    }
+});     
 });
 </script>
 
