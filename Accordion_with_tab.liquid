@@ -12,82 +12,114 @@
     }
   }
 {%- endstyle -%}
-  <div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
-    <h1>accordion with jquery</h1>
-    <div class="container">
-      <ul class="tabs">
-        {%- for block in section.blocks -%}
-        {%- case block.type -%}
-            {% when 'tab' %}
-            <li class="tab tab-{{ forloop.index }} {% if forloop.first %}current{% endif %}" data-tab="{{ block.settings['tab-title'] | handle }}" >{{ block.settings['tab-title'] }}</li>
-        {% endcase %}
-        {%- endfor -%}
-      </ul>
-
-      <div class="tab-content">
-        {%- for block in section.blocks -%}
-        {%- case block.type -%}
-            {% when 'dec' %}
-            <div id="" class="tab-dec {{ block.settings['tab-id'] | handle }}" style="{% if forloop.first %}display:block;{% endif %}">
-              {{ block.settings['tab-text'] }}
-            </div>  
-        {% endcase %}
-        {%- endfor -%}
-      </div>
+<div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
+  <h1>accordion with jquery</h1>
+  <div class="container">
+    <div id="accordion" class="acc-container">
+      {% for block in section.blocks %}
+        <div class="acc">
+          <div class="acc-head">
+            <h2>
+              {{ block.settings.title }}
+            </h2>
+          </div>
+          <div class="acc-content">
+            <p>{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-</div>
-<style>
-ul.tabs{
-  margin: 0px;
-  padding: 0px;
-  list-style: none;
+
+  <style>
+
+
+.acc {
+  margin-bottom: 10px;
 }
-ul.tabs li{
-  background: none;
-  color: #222;
-  display: inline-block;
-  padding: 10px 15px;
+
+.acc-head {
+  padding: 15px 10px;
+  font-size: 22px;
+  position: relative;
   cursor: pointer;
+ }
+
+ .acc-head::before,
+ .acc-head::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  background-color: #000;
+  transition: all .3s;
+ }
+
+ .acc-head::before {
+  right: 30px;
+  width: 3px;
+  height: 20px;
+  margin-top: -10px;
 }
 
-ul.tabs li.current{
-  background: #ededed;
-  color: #222;
+.acc-head::after {
+  right: 21px;
+  width: 20px;
+  height: 3px;
+  margin-top: -2px;
 }
 
-.tab-dec{
+.acc-head p {
+  color: #fff;
+  font-weight: bold;
+}
+
+.acc-content {
+  padding: 0 10px;
   display: none;
-  background: #ededed;
-  padding: 15px;
+}
+        
+.acc-head.active::before {
+    transform: rotate(90deg);
 }
 
-.tab-dec.current{
-  display: inherit;
-}
-</style>
+  </style>
+</div>
 
 <script>
-$(document).ready(function(){
-    $('ul.tabs li').click(function(){
-        var tab_id = $(this).attr('data-tab');
-        $('ul.tabs li').removeClass('current');
-        $('.tab-dec').removeClass('current');
-        $(this).addClass('current');
-        $("." + tab_id).addClass('current');
-    })
-    $('li.tab:first-child').click();
-});
-
+  $(document).ready(function () {
+    {% if section.settings.first_faq_show == true %}
+      $('.acc-container .acc:nth-child(1) .acc-head').addClass('active');
+      $('.acc-container .acc:nth-child(1) .acc-content').slideDown();
+    {% endif %}  
+    $('.acc-head').on('click', function () {
+      if ($(this).hasClass('active')) {
+        $(this).siblings('.acc-content').slideUp();
+        $(this).removeClass('active');
+      }
+      else {
+        $('.acc-content').slideUp();
+        $('.acc-head').removeClass('active');
+        $(this).siblings('.acc-content').slideToggle();
+        $(this).toggleClass('active');
+      }
+    });
+  });
 </script>
 
 {% schema %}
 {
-"name": "Accordion",
+"name": "Faq",
 "settings": [
       {
         "type": "text",
         "id": "custom_class",
         "label": "Custom Class"
+      },
+      {
+        "type": "checkbox",
+        "id": "first_faq_show",
+        "label": "First Faq Show",
+        "default": true
       },
       {
       "type": "range",
@@ -122,38 +154,27 @@ $(document).ready(function(){
 ],
 "blocks": [
     {
-      "type": "tab",
-      "name": "Tab",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "tab-title",
-          "default": "Text block",
-          "label": "Tab Title"
-        }
-      ]
-    },
-    {
-      "type": "dec",
-      "name": "Content",
+      "type": "column",
+      "name": "accordion",
       "settings": [
         {
           "type": "text",
-          "id": "tab-id",
-          "label": "Tab selecter"
+          "id": "title",
+          "default": "accordion",
+          "label": "Heading"
         },
         {
           "type": "richtext",
-          "id": "tab-text",
+          "id": "text",
           "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
           "label": "Contect"
         }
       ]
-    }  
+    }
   ],
 "presets": [
 {
-"name": "Accordion"
+"name": "Faq"
 }
 ]
 }
