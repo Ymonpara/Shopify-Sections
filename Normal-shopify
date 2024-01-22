@@ -4,6 +4,18 @@
 // Add Class as The Name of Your Page
 {{ page_title | handle }}
 
+// only show product detail page
+{% if template contains 'product' %}
+  <!-- This is a product detail page -->
+  <p>This is the product detail page content.</p>
+  <!-- Add your product detail page-specific content here -->
+{% else %}
+  <!-- This is not a product detail page -->
+  <p>This is not a product detail page.</p>
+  <!-- Add content for other pages here if needed -->
+{% endif %}
+
+
 // Create New Section Schema
 {% schema %}
 {
