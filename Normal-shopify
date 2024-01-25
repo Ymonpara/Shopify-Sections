@@ -1,6 +1,9 @@
 // Add Css File Link
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
+// first tab active class add
+{% if forloop.first %}current{% endif %}
+
 // Add Class as The Name of Your Page
 {{ page_title | handle }}
 
