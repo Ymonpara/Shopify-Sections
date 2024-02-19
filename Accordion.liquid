@@ -1,19 +1,15 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_left_right = section.settings.padding_left_right %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-    padding-right: {{ section.settings.padding_left_right | times: 0.75 | round: 0 }}px;
-    padding-left: {{ section.settings.padding_left_right | times: 0.75 | round: 0 }}px;
+    padding: {{ padding_top | times: 0.75 | round: 0 }}px {{ padding_left_right | times: 0.75 | round: 0  }}px {{ padding_bottom | times: 0.75 | round: 0  }}px {{ padding_left_right | times: 0.75 | round: 0 }}px;
   }
-
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-      padding-right: {{ section.settings.padding_left_right }}px;
-      padding-left: {{ section.settings.padding_left_right }}px;
+      padding: {{ padding_top }}px {{ padding_left_right }}px {{ padding_bottom }}px {{ padding_left_right }}px;
     }
   }
 {%- endstyle -%}
@@ -36,77 +32,36 @@
     </div>
   </div>
 
-  <style>
-
-
-.acc {
-  margin-bottom: 10px;
-}
-
-.acc-head {
-  padding: 15px 10px;
-  font-size: 22px;
-  position: relative;
-  cursor: pointer;
- }
-
- .acc-head::before,
- .acc-head::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  background-color: #000;
-  transition: all .3s;
- }
-
- .acc-head::before {
-  right: 30px;
-  width: 3px;
-  height: 20px;
-  margin-top: -10px;
-}
-
-.acc-head::after {
-  right: 21px;
-  width: 20px;
-  height: 3px;
-  margin-top: -2px;
-}
-
-.acc-head p {
-  color: #fff;
-  font-weight: bold;
-}
-
-.acc-content {
-  padding: 15px 10px;
-  display: none;
-}
-        
-.acc-head.active::before {
-    transform: rotate(90deg);
-}
-
-  </style>
+<style>
+.acc {margin-bottom: 10px;}
+.acc-head {padding: 15px 10px;font-size: 22px;position: relative;cursor: pointer;}
+.acc-head::before,.acc-head::after {content: '';position: absolute;top: 50%;background-color: #000;transition: all .3s;}
+.acc-head::before {right: 30px;width: 3px;height: 20px;margin-top: -10px;}
+.acc-head::after {right: 21px;width: 20px;height: 3px;margin-top: -2px;}
+.acc-head p {color: #fff;font-weight: bold;}
+.acc-content {padding: 0 10px;display: none;}
+.acc-head.active::before {transform: rotate(90deg);}
+</style>
 </div>
-
 <script>
-$(document).ready(function() {
-$('.acc-container .acc:nth-child(1) .acc-head').addClass('active');
-$('.acc-container .acc:nth-child(1) .acc-content').slideDown();
-$('.acc-head').on('click', function() {
-    if($(this).hasClass('active')) {
-      $(this).siblings('.acc-content').slideUp();
-      $(this).removeClass('active');
-    }
-    else {
-      $('.acc-content').slideUp();
-      $('.acc-head').removeClass('active');
-      $(this).siblings('.acc-content').slideToggle();
-      $(this).toggleClass('active');
-    }
-});     
-});
+  $(document).ready(function () {
+    {% if section.settings.first_faq_open == true %}
+      $('.acc-container .acc:nth-child(1) .acc-head').addClass('active');
+      $('.acc-container .acc:nth-child(1) .acc-content').slideDown();
+    {% endif %}  
+    $('.acc-head').on('click', function () {
+      if ($(this).hasClass('active')) {
+        $(this).siblings('.acc-content').slideUp();
+        $(this).removeClass('active');
+      }
+      else {
+        $('.acc-content').slideUp();
+        $('.acc-head').removeClass('active');
+        $(this).siblings('.acc-content').slideToggle();
+        $(this).toggleClass('active');
+      }
+    });
+  });
 </script>
 
 {% schema %}
@@ -117,6 +72,12 @@ $('.acc-head').on('click', function() {
         "type": "text",
         "id": "custom_class",
         "label": "Custom Class"
+      },
+      {
+        "type": "checkbox",
+        "id": "first_faq_open",
+        "label": "First Faq Open",
+        "default": true
       },
       {
       "type": "range",
