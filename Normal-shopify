@@ -36,3 +36,17 @@
 
 
 
+
+// pagination show product
+{% if paginate.current_page == paginate.pages %}
+    {% if A == B %}
+        <p>{{ A }} {{ pagination_items }} {{ paginate.items }}</p>
+    {% else %}
+        <p>{{ A }} – {{ B }} product(s) of {{ pagination_items }} {{ paginate.items }}</p>
+    {% endif %}
+{% else %}
+    <p>{{ A }} – {{ C }} product(s) of {{ pagination_items }} {{ paginate.items }}</p>
+{% endif %}
+
+
+
