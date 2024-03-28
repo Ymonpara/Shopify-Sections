@@ -1,0 +1,51 @@
+{% when 'payment-icon' %}
+<div class="details-bottom-payment-icon">
+  <ul class="details-bottom-payment-icon-wrap">
+    {%- for i in (1..6) -%}
+    {%- capture logoimage -%}image{{i}}{%- endcapture -%}
+      {% if block.settings[logoimage] != blank %}
+      <li>
+        <img src="{{block.settings[logoimage] | img_url: 'master'}}" alt="{{block.settings[logoimage].alt}}" />
+      </li>
+      {% endif %}
+    {%- endfor -%}
+  </ul>
+</div>
+
+{
+  "type": "payment-icon",
+  "name": "Payment Icon",
+  "limit": 1,
+  "settings":[
+    {
+      "type": "image_picker",
+      "id": "image1",
+      "label": "Logo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Logo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image3",
+      "label": "Logo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image4",
+      "label": "Logo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image5",
+      "label": "Logo 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image6",
+      "label": "Logo 6"
+    }
+  ]
+}
