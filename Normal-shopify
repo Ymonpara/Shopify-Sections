@@ -18,6 +18,8 @@
   <!-- Add content for other pages here if needed -->
 {% endif %}
 
+// show Delivery between date
+{{ "now" | date: "%s" | plus: 604800 | date: "%A %d" }} {{ "now" | date: "%s" | plus: 777600 | date: "%A %d" }}
 
 // Create New Section Schema
 {% schema %}
