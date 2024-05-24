@@ -14,23 +14,23 @@
   }
 {%- endstyle -%}
 <div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
-  <h1>accordion with jquery</h1>
-  <div class="container">
+  <div class="page-width">
     <div id="accordion" class="acc-container">
       {% for block in section.blocks %}
         <div class="acc">
-          <div class="acc-head">
+          <div class="acc-head {% if section.settings.first_faq_open %}{% if forloop.first %}active{% endif %}{% endif %}">
             <h2>
               {{ block.settings.title }}
             </h2>
           </div>
-          <div class="acc-content">
+          <div class="acc-content" style="{% if section.settings.first_faq_open %}{% if forloop.first %}display:block{% endif %}{% endif %}">
             <p>{{ block.settings.text }}</p>
           </div>
         </div>
       {% endfor %}
     </div>
   </div>
+</div>
 
 <style>
 .acc-head h2 { margin: 0; font-size: 18px; font-weight: 600; text-transform: capitalize; transition:all 0.5s;}
@@ -46,24 +46,20 @@
 </style>
 </div>
 <script>
-  $(document).ready(function () {
-    {% if section.settings.first_faq_open == true %}
-      $('.acc-container .acc:nth-child(1) .acc-head').addClass('active');
-      $('.acc-container .acc:nth-child(1) .acc-content').slideDown();
-    {% endif %}  
-    $('.acc-head').on('click', function () {
-      if ($(this).hasClass('active')) {
-        $(this).siblings('.acc-content').slideUp();
-        $(this).removeClass('active');
-      }
-      else {
-        $('.acc-content').slideUp();
-        $('.acc-head').removeClass('active');
-        $(this).siblings('.acc-content').slideToggle();
-        $(this).toggleClass('active');
-      }
-    });
+$(document).ready(function () {  
+  $('.acc-head').on('click', function () {
+    if ($(this).hasClass('active')) {
+      $(this).siblings('.acc-content').slideUp();
+      $(this).removeClass('active');
+    }
+    else {
+      $('.acc-content').slideUp();
+      $('.acc-head').removeClass('active');
+      $(this).siblings('.acc-content').slideToggle();
+      $(this).toggleClass('active');
+    }
   });
+});
 </script>
 
 {% schema %}
