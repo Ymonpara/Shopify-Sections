@@ -17,8 +17,8 @@
   <div class="page-width">
     <div id="accordion" class="acc-container">
       {% for block in section.blocks %}
-        <div class="acc">
-          <div class="acc-head {% if section.settings.first_faq_open %}{% if forloop.first %}active{% endif %}{% endif %}">
+        <div class="acc{% if section.settings.first_faq_open %}{% if forloop.first %} active{% endif %}{% endif %}">
+          <div class="acc-head">
             <h2>
               {{ block.settings.title }}
             </h2>
@@ -33,33 +33,35 @@
 </div>
 
 <style>
+.acc-container { max-width: 800px; margin: auto; }
 .acc-head h2 { margin: 0; font-size: 18px; font-weight: 600; text-transform: capitalize; transition:all 0.5s;}
 .acc-head.active h2 { color: #307bcd; }
-.acc-head { padding: 2rem 1rem; font-size: 22px; position: relative; cursor: pointer; border-bottom: 1px solid #eeeeee; }
+.acc-head { padding: 2rem 1rem; font-size: 22px; position: relative; cursor: pointer; border: 1px solid #eeeeee;border-radius: 5px;}
 .acc {margin-bottom: 10px;}
 .acc-head::before,.acc-head::after {content: '';position: absolute;top: 50%;background-color: #000;transition: all .3s;}
-.acc-head::before {right: 27px;width: 3px;height: 15px;margin-top: -8px;}
-.acc-head::after {right: 21px;width: 15px;height: 3px;margin-top: -2px;}
+.acc-head::before {left: 27px;width: 3px;height: 15px;margin-top: -8px;}
+.acc-head::after {left: 21px;width: 15px;height: 3px;margin-top: -2px;}
 .acc-head p {color: #fff;font-weight: bold;}
 .acc-content {padding: 0 10px;display: none;}
 .acc-head.active::before {transform: rotate(90deg);}
 </style>
-</div>
 <script>
 $(document).ready(function () {  
   $('.acc-head').on('click', function () {
     if ($(this).hasClass('active')) {
       $(this).siblings('.acc-content').slideUp();
       $(this).removeClass('active');
-    }
-    else {
+      $(this).closest('.acc').removeClass('active'); // Remove active class from .acc
+    } else {
       $('.acc-content').slideUp();
-      $('.acc-head').removeClass('active');
+      $('.acc').removeClass('active'); // Remove active class from all .acc elements
       $(this).siblings('.acc-content').slideToggle();
-      $(this).toggleClass('active');
+      $(this).closest('.acc').addClass('active'); // Add active class to the current .acc element
     }
   });
 });
+
+
 </script>
 
 {% schema %}
