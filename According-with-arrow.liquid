@@ -1,0 +1,344 @@
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_left_right = section.settings.padding_left_right %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding: {{ padding_top | times: 0.75 | round: 0 }}px {{ padding_left_right | times: 0.75 | round: 0  }}px {{ padding_bottom | times: 0.75 | round: 0  }}px {{ padding_left_right | times: 0.75 | round: 0 }}px;
+    position: relative;    
+    
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding: {{ padding_top }}px {{ padding_left_right }}px {{ padding_bottom }}px {{ padding_left_right }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
+  <div class="container">
+    <div class="acc-container-inner">
+      <div class="section-header">
+        <h1>{{ section.settings.main_heading }}</h1>
+      </div>
+      <div id="accordion" class="acc-container">
+        {% for block in section.blocks %}
+          <div class="acc">
+            <div class="acc-head">
+              <h2>
+                Step {{ forloop.index }}: {{ block.settings.title }}
+              </h2>
+              {% if block.settings.main-image != blank %}
+                {{ block.settings.main-image | image_url:width:72 | image_tag }}
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="right-image">
+      {% for block in section.blocks %}
+      <div class="right-image-item">
+        {% if block.settings.right_img != blank %}
+          {{ block.settings.right_img | image_url:width:375, height:396 | image_tag }}
+        {% endif %}
+        <div class="right-image-content">
+          <h2>
+            Step {{ forloop.index }}: <span>{{ block.settings.title }}</span>
+          </h2>
+          {% if block.settings.text != blank %}
+            {{ block.settings.text }}
+          {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if section.settings.show_btn %}
+    <div class="slider__btn">
+      <div class="arrow-btn prev-arrow disabled">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="26" viewBox="0 0 11 26" fill="none">
+          <path d="M10.7031 25.2345L0.703126 12.7345L10.7031 0.234498" stroke="black" stroke-width="0.75"/>
+        </svg>
+      </div>
+      <div class="arrow-btn next-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="26" viewBox="0 0 12 26" fill="none">
+          <path d="M0.703125 0.234497L10.7031 12.7345L0.703125 25.2345" stroke="black" stroke-width="0.75"/>
+        </svg>
+      </div>
+    </div>
+  {% endif %}
+</div>
+                    
+<style>
+{% if section.settings.show_border %}
+  .new-ritual-section {
+    border-width: 1px 0 !important;
+    border-color: #000;
+  }
+{% endif %}
+
+
+.new-ritual-section .acc-head h2 {
+  margin: 0;
+  transition: all 0.5s;
+  width: 100%;
+  color: #000;
+  font-family: Avenir;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 1px;
+}
+
+.new-ritual-section .container {
+  display: flex;
+  align-items: center;
+}
+
+.new-ritual-section .acc-container-inner,
+.new-ritual-section .right-image {
+  width: 50%;
+}
+
+.new-ritual-section .slider__btn .arrow-btn {
+  position: absolute;
+  top: 50%;
+  cursor: pointer;
+  left: 60px;
+}
+.new-ritual-section .slider__btn .arrow-btn.disabled {
+  display:none;
+}
+.new-ritual-section .acc-head {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.new-ritual-section .slider__btn .next-arrow {
+  right: 60px;
+  left: auto;
+}
+.new-ritual-section .acc-head img {
+  height: 72px;
+  width: 72px;
+  object-fit: contain;
+}
+
+.new-ritual-section .acc-container .acc {
+  padding: 18px 0;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.new-ritual-section .acc-container .acc.active {
+  opacity: 1;
+}
+
+.new-ritual-section .acc-container .acc {
+  border-bottom: 1px solid;
+}
+
+.new-ritual-section .acc-container {
+  max-width: 520px;
+}
+.new-ritual-section .section-header h1 {
+  color: #020202;
+  font-family: "The Seasons";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.37px;
+}
+  
+.new-ritual-section .right-image-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap:54px;
+}
+.new-ritual-section .right-image-content {
+  max-width: 375px;
+}
+.new-ritual-section .right-image-content h2 {
+  color: #000;
+  font-family: Avenir;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.new-ritual-section .right-image-content h2 span {
+  text-decoration: underline;
+  text-transform: capitalize;
+}
+.new-ritual-section .right-image-content p {
+  color: #000;
+  text-align: center;
+  font-family: Avenir;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 350;
+  line-height: normal;
+}
+  
+@media(max-width:991px){
+  .new-ritual-section .acc-container-inner {
+    width: 100%;
+  }
+  .new-ritual-section .right-image{
+    display:none !important;
+  }
+  .new-ritual-section .container {
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+  }
+  .new-ritual-section .acc-container .acc {
+    padding: 20px 24px;
+  }
+}
+
+</style>
+                    
+
+<script>
+$(document).ready(function() {
+  // Function to toggle accordion and update corresponding image and arrow states
+  function toggleAccordion(index) {
+    $('.acc').removeClass('active'); // Remove active state from all
+    $('.acc').eq(index).addClass('active'); // Add active state to selected
+    $('.right-image-item').hide().eq(index).show(); // Show corresponding image
+    updateArrowState(index);
+  }
+
+  // Function to update arrow states
+  function updateArrowState(index) {
+    $('.prev-arrow').toggleClass('disabled', index === 0);
+    $('.next-arrow').toggleClass('disabled', index === $('.acc').length - 1);
+  }
+
+  // Initial setup
+  toggleAccordion(0); // Open the first accordion and set initial arrow state
+
+  // Accordion click handler
+  $('.acc-head').on('click', function() {
+    var index = $(this).closest('.acc').index();
+    toggleAccordion(index);
+  });
+
+  // Arrow click handlers
+  $('.next-arrow').on('click', function() {
+    var index = $('.acc.active').index() + 1;
+    if (index < $('.acc').length) toggleAccordion(index);
+  });
+
+  $('.prev-arrow').on('click', function() {
+    var index = $('.acc.active').index() - 1;
+    if (index >= 0) toggleAccordion(index);
+  });
+});
+</script>
+
+                    
+{% schema %}
+{
+"name": "New Ritual Section",
+"class": "new-ritual-section",
+"settings": [
+      {
+        "type": "text",
+        "id": "custom_class",
+        "label": "Custom Class"
+      },
+      {
+        "type": "text",
+        "id": "main_heading",
+        "label": "Heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_btn",
+        "label": "Show Button",
+        "default":true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_border",
+        "label": "Show Border",
+        "default":true
+      },
+      {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+      {
+      "type": "range",
+      "id": "padding_left_right",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left Right",
+      "default": 0
+    }
+],
+"blocks": [
+    {
+      "type": "column",
+      "name": "accordion",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "main-image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "accordion",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "Contect"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_img",
+          "label": "right Image"
+        }
+      ]
+    }
+  ],
+"presets": [
+{
+"name": "New Ritual Section"
+}
+]
+}
+{% endschema %}
