@@ -39,7 +39,7 @@
 					<li><span class="breadcrumbs__manu">{{ article.title }}</span></li>
 
 				{% when 'search' %}
-					<li><span class="breadcrumbs__manu">{{ 'layout.breadcrumbs.search' | t }}{% if search.terms %}: {{ search.terms }}{% endif %}</span></li>
+					<li><span class="breadcrumbs__manu">Search{% if search.terms %}: {{ search.terms }}{% endif %}</span></li>
 
 				{% when 'customers/addresses', 'customers/order' %}
 					<li><a href="/account" class="breadcrumbs__manu">Account</a></li>
