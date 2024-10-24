@@ -46,18 +46,33 @@
 .acc-head.active::before {transform: rotate(90deg);}
 </style>
 <script>
-$(document).ready(function () {  
-  $('.acc-head').on('click', function () {
-    if ($(this).hasClass('active')) {
-      $(this).siblings('.acc-content').slideUp();
-      $(this).removeClass('active');
-      $(this).closest('.acc').removeClass('active'); // Remove active class from .acc
-    } else {
-      $('.acc-content').slideUp();
-      $('.acc').removeClass('active'); // Remove active class from all .acc elements
-      $(this).siblings('.acc-content').slideToggle();
-      $(this).closest('.acc').addClass('active'); // Add active class to the current .acc element
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  const accHeads = document.querySelectorAll('.acc-head');
+  
+  accHeads.forEach(function(accHead) {
+    accHead.addEventListener('click', function () {
+      const accContent = this.nextElementSibling;
+      const acc = this.closest('.acc');
+      const isActive = acc.classList.contains('active');
+      
+      // Close all open accordions
+      document.querySelectorAll('.acc-content').forEach(function(content) {
+        content.style.display = 'none';
+      });
+      document.querySelectorAll('.acc').forEach(function(acc) {
+        acc.classList.remove('active');
+      });
+      
+      if (!isActive) {
+        // Open the clicked accordion
+        accContent.style.display = 'block';
+        acc.classList.add('active'); // Add active class only to the .acc element
+      } else {
+        // If already active, just remove the active state
+        accContent.style.display = 'none';
+        acc.classList.remove('active'); // Remove active class from .acc
+      }
+    });
   });
 });
 
