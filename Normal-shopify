@@ -1,3 +1,6 @@
+// icon svg
+{{- 'icon-reset.svg' | inline_asset_content -}}
+
 // Add Css File Link
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
