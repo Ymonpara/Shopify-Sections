@@ -1,3 +1,15 @@
+// for loop in start
+{% for i in (1..5) %}
+  {% liquid
+    if i <= block.settings.rating
+      assign active = true
+    else
+      assign active = false
+    endif
+  %}
+  {% render 'icon-star', star_active: active %}
+{% endfor %}
+
 // icon svg
 {{- 'icon-reset.svg' | inline_asset_content -}}
 
