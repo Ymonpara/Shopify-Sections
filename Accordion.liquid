@@ -10,69 +10,90 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+  .title-wrapper .title { font-size: {{ section.settings.font_size | append:'px' }}; font-weight: 700; position: relative; margin-top: 0; }
+  .accordion-list { list-style: none; padding: 0; }
+  .accordion-list .accordion-item { border: 1px solid #00668014; border-radius: 10px; padding: 20px; cursor: pointer; }
+  .accordion-titel { font-size: 16px; margin: 0; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+  .accordion-list .answer p { margin: 0; font-size: 14px; }
+  .accordion-list .answer-inner { border-top: 1px solid #00668014; padding-top: 20px; margin-top: 20px; }
+  .accordion-list .accordion-item:not(:last-child) { margin: 0 0 20px; }
+  .accordion-item .accordion-titel svg { transition: all 0.5s; }
+  .accordion-item.active .accordion-titel svg { transform: rotate(180deg); }
 {%- endstyle -%}
-<div class="section-{{ section.id }}-padding {{ section.settings.custom_class }}">
+
+<div class="section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
   <div class="page-width">
-    <div id="accordion" class="acc-container">
+    {%- unless section.settings.title == blank -%}
+      <div class="title-wrapper {{ section.settings.title_alignment }}">
+        <h2 class="title inline-richtext">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+    {%- endunless -%}
+    <ul class="accordion-list">
       {% for block in section.blocks %}
-        <div class="acc{% if section.settings.first_faq_open %}{% if forloop.first %} active{% endif %}{% endif %}">
-          <div class="acc-head">
-            <h2>
-              {{ block.settings.title }}
-            </h2>
+        <li class="accordion-item">
+          <h2 class="accordion-titel">
+            {{ block.settings.title }}
+            <svg width="20" height="8" viewBox="0 0 20 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M10.8828 7.38332C10.6484 7.61741 10.3307 7.74889 9.99943 7.74889C9.66818 7.74889 9.35047 7.61741 9.1161 7.38332L4.4011 2.66999C4.16671 2.43549 4.03508 2.11749 4.03516 1.78594C4.03523 1.4544 4.16702 1.13646 4.40151 0.902072C4.63601 0.667687 4.95401 0.536055 5.28556 0.536133C5.61711 0.536211 5.93504 0.667993 6.16943 0.902489L9.99943 4.73249L13.8294 0.902489C14.0651 0.674678 14.3808 0.548534 14.7085 0.551226C15.0363 0.553919 15.3498 0.685232 15.5817 0.916884C15.8136 1.14854 15.9452 1.46199 15.9482 1.78974C15.9512 2.11748 15.8254 2.4333 15.5978 2.66916L10.8836 7.38416L10.8828 7.38332Z" fill="black"/>
+            </svg>
+          </h2>
+          <div class="answer">
+            <div class="answer-inner">
+              {{ block.settings.text }}
+            </div>
           </div>
-          <div
-            class="acc-content"
-            style="{% if section.settings.first_faq_open %}{% if forloop.first %}display:block{% endif %}{% endif %}"
-          >
-            <p>{{ block.settings.text }}</p>
-          </div>
-        </div>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </div>
 </div>
-
-<style>
-  .acc-container { max-width: 800px; margin: auto; }
-  .acc-head h2 { margin: 0; font-size: 18px; font-weight: 600; text-transform: capitalize; transition:all 0.5s;}
-  .acc-head.active h2 { color: #307bcd; }
-  .acc-head { padding: 2rem 1rem; font-size: 22px; position: relative; cursor: pointer; border: 1px solid #eeeeee;border-radius: 5px;}
-  .acc {margin-bottom: 10px;}
-  .acc-head::before,.acc-head::after {content: '';position: absolute;top: 50%;background-color: #000;transition: all .3s;}
-  .acc-head::before {left: 27px;width: 3px;height: 15px;margin-top: -8px;}
-  .acc-head::after {left: 21px;width: 15px;height: 3px;margin-top: -2px;}
-  .acc-head p {color: #fff;font-weight: bold;}
-  .acc-content {padding: 0 10px;display: none;}
-  .acc-head.active::before {transform: rotate(90deg);}
-</style>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const accHeads = document.querySelectorAll('.acc-head');
+document.addEventListener("DOMContentLoaded", function () {
+  const items = document.querySelectorAll(".accordion-list > li");
 
-    accHeads.forEach(function(accHead) {
-      accHead.addEventListener('click', function () {
-        const accContent = this.nextElementSibling;
-        const acc = this.closest('.acc');
-        const isActive = acc.classList.contains('active');
-
-        document.querySelectorAll('.acc-content').forEach(function(content) {
-          content.style.display = 'none';
-        });
-        document.querySelectorAll('.acc').forEach(function(acc) {
-          acc.classList.remove('active');
-        });
-
-        if (!isActive) {
-          accContent.style.display = 'block';
-          acc.classList.add('active'); 
+  items.forEach((item, index) => {
+    const answer = item.querySelector(".answer");
+    if (answer) {
+      answer.style.overflow = "hidden";
+      answer.style.maxHeight = "0";
+      answer.style.transition = "max-height 0.3s ease-out";
+      
+      {% if section.settings.first_faq_open %}
+        if (index === 0) {
+          item.classList.add("active");
+          answer.style.display = "block";
+          answer.style.maxHeight = answer.scrollHeight + "px";
         } else {
-          accContent.style.display = 'none';
-          acc.classList.remove('active'); 
+          answer.style.display = "none";
+        }
+      {% endif %}
+    }
+
+    item.addEventListener("click", function () {
+      const isActive = this.classList.contains("active");
+      
+      document.querySelectorAll(".accordion-list > li.active").forEach((activeItem) => {
+        activeItem.classList.remove("active");
+        const activeAnswer = activeItem.querySelector(".answer");
+        if (activeAnswer) {
+          activeAnswer.style.maxHeight = "0";
+          setTimeout(() => { activeAnswer.style.display = "none"; }, 300);
         }
       });
+      
+      if (!isActive) {
+        this.classList.add("active");
+        if (answer) {
+          answer.style.display = "block";
+          setTimeout(() => { answer.style.maxHeight = answer.scrollHeight + "px"; }, 10);
+        }
+      }
     });
   });
+});
+
 </script>
 
 {% schema %}
@@ -80,9 +101,51 @@
   "name": "Accordion",
   "settings": [
     {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+    },
+    {
       "type": "text",
-      "id": "custom_class",
-      "label": "Custom Class"
+      "id": "title",
+      "default": "Heading",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size Mobile",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+        }
+      ],
+      "default": "left",
+      "label": "Title Alignment"
     },
     {
       "type": "checkbox",
