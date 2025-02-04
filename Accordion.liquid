@@ -1,15 +1,13 @@
-{% assign padding_top = section.settings.padding_top %}
-{% assign padding_left_right = section.settings.padding_left_right %}
-{% assign padding_bottom = section.settings.padding_bottom %}
-
-
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding: {{ padding_top | times: 0.75 | round: 0 }}px {{ padding_left_right | times: 0.75 | round: 0  }}px {{ padding_bottom | times: 0.75 | round: 0  }}px {{ padding_left_right | times: 0.75 | round: 0 }}px;
+    padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
   }
-  @media screen and (min-width: 750px) {
+
+  @media screen and (min-width: 1199px) {
     .section-{{ section.id }}-padding {
-      padding: {{ padding_top }}px {{ padding_left_right }}px {{ padding_bottom }}px {{ padding_left_right }}px;
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
 {%- endstyle -%}
@@ -23,7 +21,10 @@
               {{ block.settings.title }}
             </h2>
           </div>
-          <div class="acc-content" style="{% if section.settings.first_faq_open %}{% if forloop.first %}display:block{% endif %}{% endif %}">
+          <div
+            class="acc-content"
+            style="{% if section.settings.first_faq_open %}{% if forloop.first %}display:block{% endif %}{% endif %}"
+          >
             <p>{{ block.settings.text }}</p>
           </div>
         </div>
@@ -33,68 +34,63 @@
 </div>
 
 <style>
-.acc-container { max-width: 800px; margin: auto; }
-.acc-head h2 { margin: 0; font-size: 18px; font-weight: 600; text-transform: capitalize; transition:all 0.5s;}
-.acc-head.active h2 { color: #307bcd; }
-.acc-head { padding: 2rem 1rem; font-size: 22px; position: relative; cursor: pointer; border: 1px solid #eeeeee;border-radius: 5px;}
-.acc {margin-bottom: 10px;}
-.acc-head::before,.acc-head::after {content: '';position: absolute;top: 50%;background-color: #000;transition: all .3s;}
-.acc-head::before {left: 27px;width: 3px;height: 15px;margin-top: -8px;}
-.acc-head::after {left: 21px;width: 15px;height: 3px;margin-top: -2px;}
-.acc-head p {color: #fff;font-weight: bold;}
-.acc-content {padding: 0 10px;display: none;}
-.acc-head.active::before {transform: rotate(90deg);}
+  .acc-container { max-width: 800px; margin: auto; }
+  .acc-head h2 { margin: 0; font-size: 18px; font-weight: 600; text-transform: capitalize; transition:all 0.5s;}
+  .acc-head.active h2 { color: #307bcd; }
+  .acc-head { padding: 2rem 1rem; font-size: 22px; position: relative; cursor: pointer; border: 1px solid #eeeeee;border-radius: 5px;}
+  .acc {margin-bottom: 10px;}
+  .acc-head::before,.acc-head::after {content: '';position: absolute;top: 50%;background-color: #000;transition: all .3s;}
+  .acc-head::before {left: 27px;width: 3px;height: 15px;margin-top: -8px;}
+  .acc-head::after {left: 21px;width: 15px;height: 3px;margin-top: -2px;}
+  .acc-head p {color: #fff;font-weight: bold;}
+  .acc-content {padding: 0 10px;display: none;}
+  .acc-head.active::before {transform: rotate(90deg);}
 </style>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const accHeads = document.querySelectorAll('.acc-head');
-  
-  accHeads.forEach(function(accHead) {
-    accHead.addEventListener('click', function () {
-      const accContent = this.nextElementSibling;
-      const acc = this.closest('.acc');
-      const isActive = acc.classList.contains('active');
-      
-      // Close all open accordions
-      document.querySelectorAll('.acc-content').forEach(function(content) {
-        content.style.display = 'none';
+  document.addEventListener("DOMContentLoaded", function () {
+    const accHeads = document.querySelectorAll('.acc-head');
+
+    accHeads.forEach(function(accHead) {
+      accHead.addEventListener('click', function () {
+        const accContent = this.nextElementSibling;
+        const acc = this.closest('.acc');
+        const isActive = acc.classList.contains('active');
+
+        document.querySelectorAll('.acc-content').forEach(function(content) {
+          content.style.display = 'none';
+        });
+        document.querySelectorAll('.acc').forEach(function(acc) {
+          acc.classList.remove('active');
+        });
+
+        if (!isActive) {
+          accContent.style.display = 'block';
+          acc.classList.add('active'); 
+        } else {
+          accContent.style.display = 'none';
+          acc.classList.remove('active'); 
+        }
       });
-      document.querySelectorAll('.acc').forEach(function(acc) {
-        acc.classList.remove('active');
-      });
-      
-      if (!isActive) {
-        // Open the clicked accordion
-        accContent.style.display = 'block';
-        acc.classList.add('active'); // Add active class only to the .acc element
-      } else {
-        // If already active, just remove the active state
-        accContent.style.display = 'none';
-        acc.classList.remove('active'); // Remove active class from .acc
-      }
     });
   });
-});
-
-
 </script>
 
 {% schema %}
 {
-"name": "Accordion",
-"settings": [
-      {
-        "type": "text",
-        "id": "custom_class",
-        "label": "Custom Class"
-      },
-      {
-        "type": "checkbox",
-        "id": "first_faq_open",
-        "label": "First Faq Open",
-        "default": true
-      },
-      {
+  "name": "Accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class"
+    },
+    {
+      "type": "checkbox",
+      "id": "first_faq_open",
+      "label": "First Faq Open",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -113,22 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
       "unit": "px",
       "label": "Padding Bottom",
       "default": 36
-    },
-      {
-      "type": "range",
-      "id": "padding_left_right",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding Left Right",
-      "default": 20
     }
-],
-"blocks": [
+  ],
+  "blocks": [
     {
       "type": "column",
-      "name": "accordion",
+      "name": "Accordion",
       "settings": [
         {
           "type": "text",
@@ -145,10 +131,10 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     }
   ],
-"presets": [
-{
-"name": "Accordion"
-}
-]
+  "presets": [
+    {
+      "name": "Accordion"
+    }
+  ]
 }
 {% endschema %}
