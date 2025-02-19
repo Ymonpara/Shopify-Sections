@@ -1,0 +1,276 @@
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
+    }
+  
+    @media screen and (min-width: 1199px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+    .testimonial-item-inner {padding: 32px;border: 1px solid #272727;border-radius: 10px;}
+    .testimonial-item-user-content{display: flex;gap: 14px;align-items: flex-start;}
+    .testimonial-item-user-content img{object-fit:contain;}
+    .testimonial-user-name , .testimonial-user-profession {font-size: 16px;font-weight: 600;line-height: 22.16px;letter-spacing: 0.01em;display: block;}
+    .testimonial-user-name{color: #272727;}
+    .testimonial-user-profession{color: #5A5A5A;}
+    .testimonial-item-stars{margin: 16px 0;border: 1px solid #EFEFEF;width: fit-content;border-radius: 50px;line-height: 1;padding: 6px 10px;display: flex;align-items: center;gap: 4px;}
+    .testimonial-item-stars span{padding-left:10px;}
+    .testimonial-item-review {font-size: 16px;font-weight: 400;line-height: 25.6px;letter-spacing: 0.01em;color: #363732;}
+  
+    @media (max-width:1440px){
+      .testimonial-item-inner {height: auto;}
+      .testimonial-swiper-main .swiper {margin: 0 -15px;padding: 0 15px;}
+    }
+  
+    @media (max-width:767px){
+      .testimonial-item-review, .testimonial-user-name, .testimonial-user-profession {font-size: 14px;}
+      .testimonial-item-inner {padding: 25px 16px;}
+      .testimonial-item-stars span {font-size: 12px;}
+    }
+  {%- endstyle -%}
+  
+  <section
+    id="{{ section.settings.section_id }}"
+    class="section-{{ section.id }}-padding"
+  >
+    <div class="page-width">
+      {%- unless section.settings.title == blank -%}
+        <div class="title-wrapper {{ section.settings.title_alignment }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <h2 class="title inline-richtext">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      {%- endunless -%}
+  
+      <div class="testimonial-swiper-main">
+        <div
+          class="swiper testimonial_swiper"
+          data-slidesperview="{{ section.settings.columns_desktop }}"
+          data-spacebetween="{{ section.settings.space_slide }}"
+          {%- if section.settings.autoplay == true -%}
+            data-autoplay="true"
+            data-autoplay-delay="{{ section.settings.auto_speed_delay }}"
+          {% endif %}
+          data-loop="{{ section.settings.loop }}"
+          data-mobileSlides="{{ section.settings.columns_mobile }}"
+          data-speed="{%- if section.settings.transition_speed != blank -%}{{ section.settings.transition_speed }}{%- else -%}500{%- endif -%}"
+        >
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              <div class="testimonial-item swiper-slide">
+                <div class="testimonial-item-inner">
+                  <div class="testimonial-item-user-content">
+                    <img src="{{ block.settings.avtar | img_url }}" width="44px" height="44px">
+                    <div class="testimonial-user-detail">
+                      <span class="testimonial-user-name">{{ block.settings.name }}</span>
+                      <span class="testimonial-user-profession">{{ block.settings.profession }}</span>
+                    </div>
+                  </div>
+                  <div class="testimonial-item-stars">
+                    {% assign stars = block.settings.stars %}
+                    {% for star in (1..5) %}
+                      {% if star <= stars %}
+                        ★
+                      {% else %}
+                        ☆
+                      {% endif %}
+                    {% endfor %}
+                    <span>{{ block.settings.stars }}.0</span>
+                  </div>
+                  <div class="testimonial-item-review">
+                    {{ block.settings.review }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {%- if section.settings.navigation -%}
+            <div class="swiper-button swiper-prev"> 
+              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="21" cy="21" r="20" fill="white"/>
+                <circle cx="21" cy="21" r="20.5" stroke="#229316" stroke-opacity="0.2"/>
+                <path d="M18.6551 25.486L15.1289 21.7946C14.918 21.5906 14.8125 21.3129 14.8125 21.0071C14.8125 20.7012 14.918 20.427 15.1289 20.2196L18.6551 16.5141C19.0734 16.0746 19.7555 16.0746 20.1738 16.5141C20.5922 16.9535 20.5922 17.6637 20.1738 18.1031L18.4793 19.875L26.1082 19.875C26.7059 19.875 27.1875 20.3778 27.1875 21C27.1875 21.6223 26.7059 22.125 26.1117 22.125L18.4828 22.125L20.1773 23.8969C20.5957 24.3364 20.5957 25.0465 20.1773 25.486C19.7555 25.9254 19.077 25.9254 18.6551 25.486Z" fill="black"/>
+              </svg>
+            </div>
+             <div class="swiper-button swiper-next">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="21" cy="21" r="20" fill="white"/>
+                  <circle cx="21" cy="21" r="20.5" stroke="#229316" stroke-opacity="0.2"/>
+                  <path d="M23.3449 16.514L26.8711 20.2054C27.082 20.4094 27.1875 20.6871 27.1875 20.9929C27.1875 21.2988 27.082 21.573 26.8711 21.7804L23.3449 25.4859C22.9266 25.9254 22.2445 25.9254 21.8262 25.4859C21.4078 25.0465 21.4078 24.3363 21.8262 23.8969L23.5207 22.125H15.8918C15.2941 22.125 14.8125 21.6222 14.8125 21C14.8125 20.3777 15.2941 19.875 15.8883 19.875H23.5172L21.8227 18.1031C21.4043 17.6636 21.4043 16.9535 21.8227 16.514C22.2445 16.0746 22.923 16.0746 23.3449 16.514Z" fill="black"/>
+                </svg>
+             </div>
+          {% endif %}
+          {%- if section.settings.pagination -%}
+            <div class="swiper-pagination"></div>
+          {%- endif -%}
+      </div>
+    </div>
+  </section>
+  
+  {% schema %}
+  {
+    "name": "Testimonial slider",
+    "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "title_alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+            }
+          ],
+          "default": "left",
+          "label": "Title Alignment"
+        },
+      {
+        "type": "header",
+        "content": "Slider configuration"
+      },
+      {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Columns Show"
+      },
+      {
+        "type": "range",
+        "id": "space_slide",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "label": "Space between two slide",
+        "default": 15
+      },
+      {
+        "type": "checkbox",
+        "id": "navigation",
+        "label": "Show navigation",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pagination",
+        "label": "Show pagination",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "transition_speed",
+        "label": "Transition speed",
+        "default": "1500",
+        "info": "Enter slide speed time like 500, where 1000 = 1 second"
+      },
+      {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "Autoplay",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "auto_speed_delay",
+        "label": "Autoplay speed delay",
+        "default": "800",
+        "info": "Enter delay time (before switching to other slide) like 500, where 1000 = 1 second"
+      },
+      {
+        "type": "checkbox",
+        "id": "loop",
+        "label": "Loop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "touch_move",
+        "label": "Touch move",
+        "info": "It will enable slide change by touch in touch devices.",
+        "default": true
+      },
+        {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ],
+    "blocks": [
+      {
+        "type": "testimonial",
+        "name":"Testimonial",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "avtar",
+            "label": "User Avtar"
+          },
+          {
+            "type": "text",
+            "id": "name",
+            "label": "User Name"
+          },
+          {
+            "type": "text",
+            "id": "profession",
+            "label": "User profession"
+          },
+          {
+            "type": "range",
+            "id": "stars",
+            "label": "Rating",
+            "min":1,
+            "step": 1,
+            "max": 5,
+            "default":5
+          },
+          {
+            "type": "textarea",
+            "id": "review",
+            "label": "Review"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonial slider"
+      }
+    ]
+  }
+  {% endschema %}
+  
