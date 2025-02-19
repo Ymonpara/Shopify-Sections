@@ -1,0 +1,205 @@
+{%- style -%}
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 1199px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  
+.video-with-text .grid{ gap:4rem; align-items: center; }
+.video-block { width: calc({{ section.settings.video_width | append: '%' }} - 2rem); position:relative; display:flex; }
+.video-text-block{ width: calc({{ section.settings.video_width | minus: 100 | append: '%' | remove: '-' }} - 2rem); }
+.video-block video { width: 100%; border-radius:16px; border: 1px solid #EEEEEE; }
+.video-text-inner .heading { margin: 0; font-size: {{ section.settings.font_size | append:'px' }}; font-weight: 700; position: relative; display: inline-block; }
+.video-text-inner .text { font-size: 14px; }
+.icon-list { display: flex; gap: 16px; }
+.icon-list .icon-item { border: 1px solid #00668012; background: #F9F9F9; display: flex; align-items: center; padding: 12px 20px; border-radius: 8px; gap:16px; }
+.icon-list .icon-item img { width: 36px; height: 36px; }
+.icon-list .icon-item span p { margin: 0; color: #454545; line-height: 21px; font-size:14px; }
+.icon-list .icon-item span { width: calc(100% - 52px); }
+.video-block { position: relative; }
+.video-block .mute-btn { position: absolute; right: 20px; bottom: 20px; display: flex; cursor: pointer; }
+.video-block .mute-btn .icon-unmute, .mute-btn.active .icon-mute { display: none; }
+.mute-btn.active .icon-unmute { display: block; }
+  
+@media(max-width:1199px){
+  .video-with-text .grid{ gap:2rem; }
+  .section-{{ section.id }}-padding.video-block { width: calc({{ section.settings.video_width | append: '%' }} - 1rem); position:relative; display:flex; }
+  .section-{{ section.id }}-padding .video-text-block{ width: calc({{ section.settings.video_width | minus: 100 | append: '%' | remove: '-' }} - 1rem); }
+}
+  
+@media(max-width:991px){
+  .video-with-text .grid{ gap:3rem; }
+  .video-block, .video-text-block{ width:100%; }
+  .icon-list { flex-wrap: wrap; }
+  .section-image-wrapper img { border-radius: 10px; }
+  .video-text-inner .text { font-size: 12px;}
+  .video-text-inner .heading { margin: 0 0 1rem; font-size: {{ section.settings.font_size_mobile | append: 'px' }}; }
+  .video-block .mute-btn { right: 10px; bottom: 10px; }
+  .icon-list .icon-item { padding: 10px 16px; gap: 10px; }
+  .icon-list .icon-item span { width: calc(100% - 46px); }
+}
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="grid">
+      <div class="video-block">
+        {{
+          section.settings.video
+          | video_tag: image_size: '1100x', autoplay: true, loop: true, controls: false, muted: true
+        }}
+        <div class="mute-btn">
+          {{ 'icon-mute.svg' | inline_asset_content }}
+          {{ 'icon-unmute.svg' | inline_asset_content }}
+        </div>
+      </div>
+      <div class="video-text-block">
+        <div class="video-text-inner">
+          {% if section.settings.heading != blank %}
+            {{ section.settings.heading | replace:'<p>','<h4 class="heading">' | replace:'</p>','</h4>' }}
+          {% endif %}
+          {% if section.settings.text != blank %}
+            <div class="text">{{ section.settings.text }}</div>
+          {% endif %}
+          <div class="icon-list">
+            {% for block in section.blocks %}
+              <div class="icon-item">
+                <img src="{{ block.settings.icon | image_url }}" width="36" height="36">
+                {% if block.settings.text != blank -%}
+                  <span>{{ block.settings.text }}</span>
+                {%- endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% javascript %}
+document.querySelectorAll(".video-block").forEach(block => {
+  const video = block.querySelector("video");
+  const muteBtn = block.querySelector(".mute-btn");
+
+  muteBtn.addEventListener("click", function () {
+    this.classList.toggle("active");
+    video.muted = !video.muted;
+  });
+});
+{% endjavascript %} 
+
+{% schema %}
+{
+  "name": "Video With Text",
+  "class": "video-with-text",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Video Width",
+      "default": 40
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size Mobile",
+      "default": 20
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_block",
+      "name":"Icon Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video With Text"
+    }
+  ]
+}
+{% endschema %}
