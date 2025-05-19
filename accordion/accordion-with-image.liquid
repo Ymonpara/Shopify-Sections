@@ -1,0 +1,189 @@
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 1199px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  .acc-container .acc.active svg {transform: rotate(180deg);}
+  .acc-container .acc svg {transition: all 0.5s;}
+  .acc-content {padding: 10px 0;display: none;}
+  .accordion-with-Image .accordion-with-Image-inner {display: flex;align-items: center;}
+  .accordion-with-Image .acc-container-inner,.accordion-with-Image .right-image {width: 50%;}
+  .acc-head {display: flex;align-items: center;gap: 30px;}
+  .acc-content h2 {color: #000;font-family: The Seasons;font-size: 40px;font-weight: 400;line-height: normal;letter-spacing: 0.6px;padding: 0 0 10px;}
+  .acc-container .acc {padding: 18px 64px 18px 0;opacity: 0.5;cursor: pointer;}
+  .acc-container .acc.active {opacity: 1;}
+  .acc-container .acc:not(:last-child) {border-bottom: 1px solid;}
+  .accordion-with-Image .acc-container-inner {border: solid;border-width: 0 1px 0 0;}
+  .acc-container {padding: 30px 0;}
+  .accordion-with-Image {border-width: 1px 0;}
+  .right-image-item {display: flex;align-items: center;justify-content: center;}
+  @media (max-width:1440px) {
+  .accordion-with-Image .accordion-with-Image-inner {margin: 0;}
+  .acc-container .acc {opacity: 0.5;}
+  }
+{%- endstyle -%}
+<div class="section-{{ section.id }}-padding {{ section.settings.custom_class }} color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="accordion-with-Image-inner">
+      <div class="acc-container-inner">
+        <div id="accordion" class="acc-container">
+          {% for block in section.blocks %}
+            <div class="acc{% if section.settings.first_faq_open %}{% if forloop.first %} active{% endif %}{% endif %}">
+              <div class="acc-head">
+                {% if block.settings['main-image'] != blank %}
+                  {{ block.settings['main-image'] | image_url: width: 36 | image_tag }}
+                {% endif %}
+                <h2>
+                  {{ block.settings.title }}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="9" viewBox="0 0 19 9" fill="none">
+                    <path d="M18 0.81543L9.25 7.81543L0.5 0.81543" stroke="black" stroke-width="0.75"/>
+                  </svg>
+                </h2>
+              </div>
+              <div
+                class="acc-content"
+                style="{% if section.settings.first_faq_open %}{% if forloop.first %}display:block{% endif %}{% endif %}"
+              >
+                {{ block.settings.text }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="right-image">
+        {% for block in section.blocks %}
+          {% if block.settings.right_img != blank %}
+            <div class="right-image-item">
+              {{ block.settings.right_img | image_url: width: 470, height: 530 | image_tag }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const accElements = document.querySelectorAll(".acc");
+    const rightImageItems = document.querySelectorAll(".right-image-item");
+    const accHeads = document.querySelectorAll(".acc-head");
+
+    const activeAcc = document.querySelector(".acc.active");
+    if (activeAcc) {
+      const activeIndex = Array.from(accElements).indexOf(activeAcc);
+      rightImageItems.forEach((item, index) => {
+        item.style.display = index === activeIndex ? "block" : "none";
+      });
+    } else {
+      rightImageItems.forEach(item => (item.style.display = "none"));
+    }
+
+    accHeads.forEach((head, index) => {
+      head.addEventListener("click", function () {
+        const acc = head.closest(".acc");
+        const accContent = acc.querySelector(".acc-content");
+        const isActive = acc.classList.contains("active");
+
+        document.querySelectorAll(".acc-content").forEach(content => {
+          content.style.display = "none";
+        });
+        accElements.forEach(el => el.classList.remove("active"));
+        rightImageItems.forEach(item => (item.style.display = "none"));
+
+        if (!isActive) {
+          acc.classList.add("active");
+          accContent.style.display = "block";
+          rightImageItems[index].style.display = "block";
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+"name": "Accordion With Image",
+"class": "accordion-with-Image",
+"settings": [
+      {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+      {
+        "type": "checkbox",
+        "id": "first_faq_open",
+        "label": "First Faq Open",
+        "default": true
+      },
+      {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+],
+"blocks": [
+    {
+      "type": "column",
+      "name": "accordion",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "main-image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "accordion",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "Contect"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_img",
+          "label": "right Image"
+        }
+      ]
+    }
+  ],
+"presets": [
+{
+"name": "Accordion With Image"
+}
+]
+}
+{% endschema %}

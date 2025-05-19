@@ -1,0 +1,221 @@
+.product-tab-inner .tabs {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  gap: 6rem;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid #e5e5e5;
+  justify-content: center;
+}
+.product-tab-inner {
+  background: #fd000304;
+  border: 1px solid #ff00000f;
+  border-radius: 10px;
+}
+.product-tab-inner .tabs .tab {
+  font-size: 15px;
+  font-weight: 500;
+  color: #666464;
+  text-transform: uppercase;
+  position: relative;
+  padding: 2rem;
+  cursor: pointer;
+}
+.product-tab-inner .tabs .tab.current {
+  color: #000;
+  font-weight: 600;
+}
+.product-tab-inner .tabs .tab.current:before {
+  content: "";
+  position: absolute;
+  width: calc(100% - 4rem);
+  height: 4px;
+  background: #fd0003;
+  left: 2rem;
+  bottom: -1px;
+  border-radius: 10px 10px 0 0;
+}
+.product-tab-inner .tab-content {
+  padding: 2rem 4rem 3rem;
+}
+.product-tab-inner .tab-content .content-wrap {
+  font-size: 15px;
+  line-height: 27px;
+  font-weight: 400;
+  color: #000;
+}
+.product-tab-inner .tab-content .content-wrap ul{
+  list-style: none;
+  padding:0;
+}
+.product-tab-inner .tab-content .content-wrap > ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  gap:1rem 2rem;
+}
+.product-tab-inner .tab-content .content-wrap ul li {
+  position: relative;
+  padding: 0 0 0 3rem;
+}
+.product-tab-inner .tab-content .content-wrap > ul li:before {
+  content: "";
+  position: absolute;
+  background-image: url(https://dshop-com-au.myshopify.com/cdn/shop/files/check.svg);
+  width: 16px;
+  height: 16px;
+  left: 0;
+  top: 0.5rem;
+  filter: brightness(0) saturate(100%) invert(21%) sepia(64%) saturate(7429%)
+    hue-rotate(346deg) brightness(103%) contrast(152%);
+}
+.product-tab-inner .tab-content .content-wrap h6 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 2rem 0 0.5rem;
+}
+.product-tab-inner .faq .accordion-inner {
+  background: #fafafa;
+  border: 1px solid #0000000d;
+  border-radius: 1rem;
+}
+.product-tab-inner .faq .accordion-inner:not(:last-child) {
+  margin: 0 0 2.4rem;
+}
+.product-tab-inner .faq .accordion-inner .accordion-head {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 2.4rem;
+  cursor: pointer;
+}
+.product-tab-inner .faq .accordion-dec {
+  border-top: 1px solid #e1e1e1;
+  padding: 2rem 0 2.4rem;
+  margin: 0 2.4rem;
+  display: none;
+}
+.product-tab-inner .faq .current .accordion-dec {
+  display: block;
+}
+.product-tab-inner .faq .accordion-dec p {
+  font-size: 1.8rem;
+  line-height: 28px;
+  color: #232323;
+  margin: 0;
+}
+.product-tab-inner .faq .accordion-inner.current svg {
+  transform: rotate(180deg);
+}
+.product-tab-inner .faq .accordion-inner svg {
+  width: 2rem;
+  height: 2rem;
+}
+.product-tab-inner .tab-content .faq .content-wrap {
+  max-width: 83rem;
+}
+.product-tab-inner .tabs .reviews {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.product-tab-inner .tabs .reviews:after {
+  content: "";
+  background-image: url(https://cdn.shopify.com/s/files/1/0900/4269/6045/files/star.svg?v=1738561142);
+  display: block;
+  height: 18px;
+  width: 94px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.product-tab-inner .tab-content .content-wrap ul li p {
+    margin-top: 0;
+}
+
+@media (min-width: 750px) {
+  .product-tab-inner .tab-dec {
+    display: none;
+    transition: all 0.3s ease-in-out;
+  }
+  .product-tab-inner .tab-dec.current {
+    display: block;
+  }
+}
+
+@media (max-width: 991px) {
+  .product-tab-inner .tabs .tab {
+    font-size: 1.6rem;
+  }
+  .product-tab-inner .tabs {
+    gap: 0;
+    justify-content: space-between;
+  }
+  .product-tab-inner .tab-content {
+    padding: 2rem 2rem 3rem;
+}
+}
+
+@media (max-width: 749px) {
+  .product-tab-inner .tab-content .content-wrap {
+    display: none;
+  }
+  .product-tab-inner .tab-content .current .content-wrap {
+    display: block;
+  }
+  .product-tab-inner .tab-content .content-wrap {
+    font-size: 1.4rem;
+    padding: 0 1.6rem 1.6rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .accordion-header {
+    font-size: 1.4rem;
+    color: #000;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 1.6rem;
+    line-height: normal;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tab-dec:not(:last-child) .accordion-header{
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .product-tab-inner .tab-dec.current .accordion-header svg {
+    transform: rotate(180deg);
+  }
+  .product-tab-inner .tab-content .content-wrap h6 {
+    font-size: 1.6rem;
+  }
+  .product-tab-inner .faq .accordion-inner .accordion-head {
+    font-size: 1.6rem;
+    padding: 1.6rem;
+  }
+  .product-tab-inner .faq .accordion-inner svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .product-tab-inner .faq .accordion-dec {
+    padding: 1rem 0 1.6rem;
+    margin: 0 1.6rem;
+  }
+  .product-tab-inner .faq .accordion-dec p {
+    font-size: 1.4rem;
+    line-height: 24px;
+  }
+  .product-tab-inner .tab-content .faq .content-wrap {
+    padding-top: 2rem;
+  }
+  .product-tab-inner .tab-content {
+    padding: 0;
+  }
+  .product-tab-inner .tab-content .content-wrap ul {
+    grid-template-columns: 1fr;
+    gap:0;
+  }
+}

@@ -1,0 +1,217 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 1199px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{% if section.settings.show_border %}
+.accordion-width-arrow {border-width: 1px 0 !important;border-color: #000;}
+{% endif %}
+.accordion-width-arrow .accordion-width-arrow-inner {display: flex;align-items: center;}
+.accordion-width-arrow .acc-container-inner,.accordion-width-arrow .right-image {width: 50%;}
+.accordion-width-arrow .slider__btn .arrow-btn {position: absolute;top: 50%;cursor: pointer;left: 60px;}
+.accordion-width-arrow .slider__btn .arrow-btn.disabled {display:none;}
+.accordion-width-arrow .acc-head {display: flex;align-items: center;gap: 30px;}
+.accordion-width-arrow .slider__btn .next-arrow {right: 60px;left: auto;}
+.accordion-width-arrow .acc-head img {height: 72px;width: 72px;object-fit: contain;}
+.accordion-width-arrow .acc-container .acc {padding: 18px 0;opacity: 0.5;cursor: pointer;}
+.accordion-width-arrow .acc-container .acc.active {opacity: 1;}
+.accordion-width-arrow .acc-container .acc {border-bottom: 1px solid;}
+.accordion-width-arrow .acc-container {max-width: 520px;}
+.accordion-width-arrow .section-header h1 {color: #020202;font-family: "The Seasons";font-size: 40px;font-style: normal;font-weight: 400;line-height: normal;letter-spacing: 0.37px;}
+.accordion-width-arrow .right-image-item {display: flex;align-items: center;justify-content: center;flex-direction: column;text-align: center;gap:54px;}
+.accordion-width-arrow .right-image-content {max-width: 375px;margin:auto;}
+@media(max-width:991px){
+.accordion-width-arrow .acc-container-inner {width: 100%;}
+.accordion-width-arrow .right-image{display:none !important;}
+.accordion-width-arrow .accordion-width-arrow-inner {flex-wrap: wrap;flex-direction: column-reverse;}
+.accordion-width-arrow .acc-container .acc {padding: 20px 24px;}
+}
+{%- endstyle -%}
+<div class="section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+<div class="page-width">
+<div class="accordion-width-arrow-inner">
+  <div class="acc-container-inner">
+    <div class="section-header">
+      <h1>{{ section.settings.main_heading }}</h1>
+    </div>
+    <div id="accordion" class="acc-container">
+      {% for block in section.blocks %}
+        <div class="acc">
+          <div class="acc-head">
+            <h4>Step {{ forloop.index }}: {{ block.settings.title }}</h4>
+            {% if block.settings['main-image'] != blank %}
+              {{ block.settings['main-image'] | image_url: width: 72 | image_tag }}
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="right-image">
+    {% for block in section.blocks %}
+      <div class="right-image-item">
+        {% if block.settings.right_img != blank %}
+          {{ block.settings.right_img | image_url: width: 375, height: 396 | image_tag }}
+        {% endif %}
+        <div class="right-image-content">
+          <h2>
+            Step {{ forloop.index }}: <span>{{ block.settings.title }}</span>
+          </h2>
+          {% if block.settings.text != blank %}
+            {{ block.settings.text }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% if section.settings.show_btn %}
+  <div class="slider__btn">
+    <div class="arrow-btn prev-arrow disabled">
+      <svg xmlns="http://www.w3.org/2000/svg" width="11" height="26" viewBox="0 0 11 26" fill="none">
+        <path d="M10.7031 25.2345L0.703126 12.7345L10.7031 0.234498" stroke="black" stroke-width="0.75"/>
+      </svg>
+    </div>
+    <div class="arrow-btn next-arrow">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="26" viewBox="0 0 12 26" fill="none">
+        <path d="M0.703125 0.234497L10.7031 12.7345L0.703125 25.2345" stroke="black" stroke-width="0.75"/>
+      </svg>
+    </div>
+  </div>
+{% endif %}
+</div>
+</div>
+
+{% javascript %}
+document.addEventListener("DOMContentLoaded", function () {
+function toggleAccordion(index) {
+  document.querySelectorAll(".acc").forEach((acc, i) => {
+    acc.classList.toggle("active", i === index);
+  });
+  document.querySelectorAll(".right-image-item").forEach((img, i) => {
+    img.style.display = i === index ? "block" : "none";
+  });
+  updateArrowState(index);
+}
+
+function updateArrowState(index) {
+  document.querySelector(".prev-arrow").classList.toggle("disabled", index === 0);
+  document.querySelector(".next-arrow").classList.toggle("disabled", index === document.querySelectorAll(".acc").length - 1);
+}
+
+toggleAccordion(0);
+document.querySelectorAll(".acc-head").forEach((head, i) => {
+  head.addEventListener("click", function () {
+    toggleAccordion(i);
+  });
+});
+
+document.querySelector(".next-arrow").addEventListener("click", function () {
+  let index = [...document.querySelectorAll(".acc")].findIndex(acc => acc.classList.contains("active")) + 1;
+  if (index < document.querySelectorAll(".acc").length) toggleAccordion(index);
+});
+
+document.querySelector(".prev-arrow").addEventListener("click", function () {
+  let index = [...document.querySelectorAll(".acc")].findIndex(acc => acc.classList.contains("active")) - 1;
+  if (index >= 0) toggleAccordion(index);
+});
+});
+{% endjavascript %}
+
+{% schema %}
+{
+"name": "Accordion width Arrow",
+"class": "accordion-width-arrow",
+"settings": [
+{
+  "type": "color_scheme",
+  "id": "color_scheme",
+  "label": "Color scheme",
+  "default": "scheme-1"
+},
+{
+  "type": "text",
+  "id": "main_heading",
+  "label": "Heading"
+},
+{
+  "type": "checkbox",
+  "id": "show_btn",
+  "label": "Show Button",
+  "default": true
+},
+{
+  "type": "checkbox",
+  "id": "show_border",
+  "label": "Show Border",
+  "default": true
+},
+{
+  "type": "header",
+  "content": "t:sections.all.padding.section_padding_heading"
+},
+{
+  "type": "range",
+  "id": "padding_top",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "unit": "px",
+  "label": "t:sections.all.padding.padding_top",
+  "default": 40
+},
+{
+  "type": "range",
+  "id": "padding_bottom",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "unit": "px",
+  "label": "t:sections.all.padding.padding_bottom",
+  "default": 52
+}
+],
+"blocks": [
+{
+  "type": "column",
+  "name": "accordion",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main-image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "accordion",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+      "label": "Contect"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_img",
+      "label": "right Image"
+    }
+  ]
+}
+],
+"presets": [
+{
+  "name": "Accordion width Arrow"
+}
+]
+}
+{% endschema %}

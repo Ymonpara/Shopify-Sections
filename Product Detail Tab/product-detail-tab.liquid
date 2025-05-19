@@ -1,0 +1,229 @@
+{{ 'product-detail-tab.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top | times: 0.60 | round: 0 }}px;
+  padding-bottom: {{ section.settings.padding_bottom | times: 0.60 | round: 0 }}px;
+}
+
+@media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+}
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="product-tab-inner">
+      <ul class="tabs small-hide">
+        {%- for block in section.blocks -%}
+          {% if block.settings.dec_1 or block.settings.tab_content != blank or product.description != blank %}
+            <li class="tab tab-{{ forloop.index }}{% if forloop.first %} current{% endif %} {{ block.settings['tab-title'] | handle }}" data-tab="tab{{ forloop.index }}">{{ block.settings['tab-title'] }}</li>
+          {% endif %}
+        {%- endfor -%}
+      </ul>
+      <div class="tab-content">
+        {%- for block in section.blocks -%}
+          {%- capture tabcontent -%}
+            {%- case block.type -%}
+              {%- when 'description' -%}
+              {% if product.description != blank %}
+                <div class="accordion-header medium-hide large-up-hide">
+                  {{ block.settings['tab-title'] }}
+                  {{ 'icon-down.svg' | inline_asset_content }}
+                </div>
+              {% endif %}
+              <div class="content-wrap">
+                {{ product.description }}
+              </div>
+              
+              {%- when 'custom' -%}
+              {% if block.settings.dec_1 or block.settings.tab_content != blank %}
+                <div class="accordion-header medium-hide large-up-hide">
+                  {{ block.settings['tab-title'] }}
+                  {{ 'icon-down.svg' | inline_asset_content }}
+                </div>
+              {% endif %}
+              <div class="content-wrap">
+                {% if block.settings.tab_content != blank or block.settings.content_page.content != blank %}
+                  {{ block.settings.tab_content }}
+                  {% if block.settings.tab_image != blank %}  
+                    <img src="{{ block.settings.tab_image | img_url }}" width="" height="">
+                  {% endif %}
+                  {{ block.settings.content_page.content }}
+                {% else %}
+                  {{ product.metafields.custom.product_tab_ingredients }}
+                {% endif %}
+              </div>
+              
+              {%- when 'review' -%}
+              {% if block.settings['tab-title'] != blank %}
+                <div class="accordion-header medium-hide large-up-hide {{ block.settings['tab-title'] | handle }}">
+                  {{ block.settings['tab-title'] }}
+                  {{ 'icon-down.svg' | inline_asset_content }}
+                </div>
+              {% endif %}
+              <div class="content-wrap">
+                <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-id='{{ product.id }}'> 
+                  {{ product.metafields.judgeme.widget }} 
+                </div> 
+              </div>
+              
+            {%- endcase -%}
+          {%- endcapture -%}
+          {%- assign tabcontent = tabcontent | strip -%}
+          {%- if tabcontent != '' -%}
+            <div
+              data-tab-content="tab{{ forloop.index }}"
+              class="tab-dec {{ block.type }} {% if forloop.first %}current{% endif %}"
+            >
+              {{ tabcontent }}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-dec');
+  const accordionHeaders = document.querySelectorAll('.accordion-header');
+  const accordionHead = document.querySelectorAll('.accordion-head');
+  const accordionContents = document.querySelectorAll('.accordion-inner');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function () {
+      const tabId = this.getAttribute('data-tab');
+
+      tabs.forEach(t => t.classList.remove('current'));
+      tabContents.forEach(content => content.classList.remove('current'));
+
+      tab.classList.add('current');
+      document.querySelector(`[data-tab-content="${tabId}"]`).classList.add('current');
+    });
+  });
+  accordionHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        const parentContent = header.parentElement;
+        const isActive = parentContent.classList.contains('current');
+    
+        tabContents.forEach(content => content.classList.remove('current'));
+    
+        if (!isActive) {
+          parentContent.classList.add('current');
+        }
+      }
+    });
+  });
+});
+
+  
+</script>
+{% schema %}
+{
+  "name": "Product Detail Tab",
+  "class": "product-detail-tab",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description",
+      "limit": 1,
+      "name": "Description",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Description"
+        },
+        {
+          "type": "text",
+          "id": "tab-title",
+          "label": "Tab title",
+          "default":"Tab Title"
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "name": "Custom content",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab-title",
+          "label": "Tab title",
+        },
+        {
+          "type": "richtext",
+          "id": "tab_content",
+          "label": "Tab content"
+        },
+        {
+          "type": "image_picker",
+          "id": "tab_image",
+          "label":"Image"
+        },
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Tab content from page"
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab-title",
+          "label": "Tab title",
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Detail Tab",
+      "blocks": [
+        {
+          "type": "description"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
