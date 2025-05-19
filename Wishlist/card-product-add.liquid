@@ -1,0 +1,25 @@
+<div class="wishlist-buttons" style="position:absolute;z-index:9;">
+    <button 
+      class="wishlist-btn"
+      data-wishlist-add
+      data-variant-id="{{ card_product.selected_or_first_available_variant.id }}"
+      data-product-handle="{{ card_product.handle }}"
+      data-product-title="{{ card_product.title | escape }}"
+      data-product-image="{{ card_product.featured_image | img_url: '400x' }}"
+      data-product-price="{{ card_product.price | money }}"
+      data-variant-title="{{ card_product.selected_or_first_available_variant.title | escape }}"
+      data-default-text="♡ Wishlist"
+    >
+      ♡ Wishlist
+    </button>
+    
+    <button 
+      class="wishlist-btn wishlist-remove-btn"
+      data-wishlist-remove
+      data-variant-id="{{ card_product.selected_or_first_available_variant.id }}"
+      data-default-text="♥ Wishlisted"
+      style="display: none;"
+    >
+      ♥ Wishlisted
+    </button>
+  </div>
