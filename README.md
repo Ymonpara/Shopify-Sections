@@ -28,15 +28,15 @@
   <br>
   <li>
     For Loop In Star <br>
-    {% for i in (1..5) %}
-      {% liquid
-        if i <= block.settings.rating
-          assign active = true
-        else
-          assign active = false
-        endif
-      %}
-      /* Star Code */
+    {% for i in (1..5) %} <br>
+      {% liquid <br>
+        if i <= block.settings.rating <br>
+          assign active = true <br> 
+        else <br>
+          assign active = false <br>
+        endif <br>
+      %} <br>
+      /* Star Code */ <br>
     {% endfor %}
   </li>
 </ol>
