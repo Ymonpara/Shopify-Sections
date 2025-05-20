@@ -1,4 +1,4 @@
-<ul>
+<ol>
   <li>
     Icon SVG <br>
     {{- 'icon-reset.svg' | inline_asset_content -}}
@@ -7,4 +7,10 @@
     Add Css File Link <br>
     {{ 'component-card.css' | asset_url | stylesheet_tag }}
   </li>
-</ul>
+</ol>
+
+<style>
+  li{
+    padding-bottom: 50px;
+  }
+</style>
