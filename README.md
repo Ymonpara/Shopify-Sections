@@ -1,5 +1,5 @@
 <ol>
-  <li>
+  <li style="padding-bottom: 50px;">
     Icon SVG <br>
     {{- 'icon-reset.svg' | inline_asset_content -}}
   </li>
@@ -9,8 +9,3 @@
   </li>
 </ol>
 
-<style>
-  li{
-    padding-bottom: 50px;
-  }
-</style>
