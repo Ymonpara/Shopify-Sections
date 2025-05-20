@@ -1,5 +1,5 @@
 <ol>
-  <li style="padding-bottom: 50px;">
+  <li>
     Icon SVG <br>
     {{- 'icon-reset.svg' | inline_asset_content -}}
   </li>
