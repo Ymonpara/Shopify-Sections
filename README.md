@@ -8,5 +8,10 @@
     Add Css File Link <br>
     {{ 'component-card.css' | asset_url | stylesheet_tag }}
   </li>
+  <br>
+  <li>
+    First Tab Active Class Add <br>
+    {{ 'component-card.css' | asset_url | stylesheet_tag }}
+  </li>
 </ol>
 
