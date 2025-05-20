@@ -21,9 +21,9 @@
   <br>
   <li>
     Show Content <br>
-    Product Template : {% if template contains 'product' %}{% endif %}
-    Collection Template : {% if template contains 'collection' %}{% endif %}
-    Product Ta : g{% if product.tags contains 'bundle-offer' %}{% endif %}
+    Product Template : {% if template contains 'product' %}{% endif %} <br>
+    Collection Template : {% if template contains 'collection' %}{% endif %} <br>
+    Product Tag : {% if product.tags contains 'bundle-offer' %}{% endif %}
   </li>
 </ol>
 
