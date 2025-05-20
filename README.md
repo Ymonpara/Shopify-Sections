@@ -1,6 +1,6 @@
-<ul type="number">
+<ul>
   <li>
-    <h5>icon svg</h5>  
+    icon svg
     <div> {{- 'icon-reset.svg' | inline_asset_content -}}</div>  
   </li>
 </ul>
