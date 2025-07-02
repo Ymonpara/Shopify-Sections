@@ -40,6 +40,7 @@
     {% endfor %}
   </li>
   <li>
+    For Richtext <br>
     assign plain_text = block.settings.text | strip_newlines | strip_html | strip
   </li>
 </ol>
