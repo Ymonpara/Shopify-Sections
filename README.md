@@ -39,5 +39,8 @@
       /* Star Code */ <br>
     {% endfor %}
   </li>
+  <li>
+    assign plain_text = block.settings.text | strip_newlines | strip_html | strip
+  </li>
 </ol>
 
