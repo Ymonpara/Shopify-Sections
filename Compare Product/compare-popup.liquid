@@ -1,0 +1,42 @@
+<div id="compare-popup" class="compare-popup d-none">
+  <div class="compare-header">
+    <h3>Compare Products</h3>
+    <button id="clear-compare">Remove All</button>
+  </div>
+  <div class="compare-products-container"></div>
+</div>
+
+<style>
+.compare-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 9999;
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  overflow-x: auto;
+}
+.compare-products-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: nowrap;
+}
+.compare-product {
+  width: 200px;
+  border: 1px solid #eee;
+  padding: 10px;
+  position: relative;
+}
+.compare-product .remove-product {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+</style>
