@@ -1,0 +1,9 @@
+{% assign contentione = product.metafields.custom.contenzione_icons.value %}
+{% if contentione %}
+  {% for item in contentione %}
+    <div class="contention-info">
+      <h3>{{ item.label | escape }}</h3>
+      <img src="{{ item.image | image_url }}" width="" height="" alt="{{ item.label | escape }}" loading="lazy">
+    </div>
+  {% endfor %}
+{% endif %}
