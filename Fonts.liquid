@@ -1,0 +1,28 @@
+{%- liquid
+  assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+  assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+
+  assign body_font_600 = settings.type_body_font | font_modify: 'weight', '600'
+  assign body_font_700 = settings.type_body_font | font_modify: 'weight', '700'
+%}
+
+
+{{ body_font_bold | font_face: font_display: 'swap' }}
+{{ body_font_600 | font_face: font_display: 'swap' }}
+{{ body_font_700 | font_face: font_display: 'swap' }}
+{{ body_font_italic | font_face: font_display: 'swap' }}
+
+
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("{{ 'NeueMontreal-Regular.eot' | asset_url }}");
+  src: url("{{ 'NeueMontreal-Regular.eot' | asset_url }}?#iefix") format("embedded-opentype"),
+      url("{{ 'NeueMontreal-Regular.woff2' | asset_url }}") format("woff2"),
+      url("{{ 'NeueMontreal-Regular.woff' | asset_url }}") format("woff"),
+      url("{{ 'NeueMontreal-Regular.ttf' | asset_url }}") format("truetype"),
+      url("{{ 'NeueMontreal-Regular.svg' | asset_url }}#NeueMontreal-Regular") format("svg");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
