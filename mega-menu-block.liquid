@@ -1,0 +1,49 @@
+{%- assign current_menu_name = link.title | downcase | strip -%}
+{%- assign matched_block = null -%}
+{%- for block in section.blocks -%}
+  {%- assign block_menu_name = block.settings.megamenu_id | downcase | strip -%}
+  {%- if block.type == 'logo' and block_menu_name == current_menu_name -%}
+    {%- assign matched_block = block -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+
+{%- if matched_block != null and matched_block.settings.menu_menu_image != blank -%}
+<div>
+
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+"blocks": [
+    {
+      "type": "logo",
+      "name": "Mega Menu Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "menu_menu_image",
+          "label": "Mega Menu Image"
+        },
+        {
+          "type": "text",
+          "id": "megamenu_id",
+          "label": "Menu Name (must match nav link title exactly)"
+        },
+        {
+          "type": "text",
+          "id": "menu_text",
+          "label": "Menu Text"
+        },
+        {
+          "type": "url",
+          "id": "menu_url",
+          "label": "Menu Url"
+        }
+      ]
+    }
+  ],
+}
+{% endschema %}
