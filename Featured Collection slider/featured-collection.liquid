@@ -169,25 +169,32 @@
       </ul>
     </div>
     {% if section.settings.enable_slider %}
-      {%- if section.settings.navigation -%}
-        <div class="swiper-button swiper-prev"> 
-          <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="21" cy="21" r="20" fill="white"/>
-            <circle cx="21" cy="21" r="20.5" stroke="#229316" stroke-opacity="0.2"/>
-            <path d="M18.6551 25.486L15.1289 21.7946C14.918 21.5906 14.8125 21.3129 14.8125 21.0071C14.8125 20.7012 14.918 20.427 15.1289 20.2196L18.6551 16.5141C19.0734 16.0746 19.7555 16.0746 20.1738 16.5141C20.5922 16.9535 20.5922 17.6637 20.1738 18.1031L18.4793 19.875L26.1082 19.875C26.7059 19.875 27.1875 20.3778 27.1875 21C27.1875 21.6223 26.7059 22.125 26.1117 22.125L18.4828 22.125L20.1773 23.8969C20.5957 24.3364 20.5957 25.0465 20.1773 25.486C19.7555 25.9254 19.077 25.9254 18.6551 25.486Z" fill="black"/>
-          </svg>
-        </div>
-         <div class="swiper-button swiper-next">
-            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="21" cy="21" r="20" fill="white"/>
-              <circle cx="21" cy="21" r="20.5" stroke="#229316" stroke-opacity="0.2"/>
-              <path d="M23.3449 16.514L26.8711 20.2054C27.082 20.4094 27.1875 20.6871 27.1875 20.9929C27.1875 21.2988 27.082 21.573 26.8711 21.7804L23.3449 25.4859C22.9266 25.9254 22.2445 25.9254 21.8262 25.4859C21.4078 25.0465 21.4078 24.3363 21.8262 23.8969L23.5207 22.125H15.8918C15.2941 22.125 14.8125 21.6222 14.8125 21C14.8125 20.3777 15.2941 19.875 15.8883 19.875H23.5172L21.8227 18.1031C21.4043 17.6636 21.4043 16.9535 21.8227 16.514C22.2445 16.0746 22.923 16.0746 23.3449 16.514Z" fill="black"/>
-            </svg>
-         </div>
-      {% endif %}
-      {%- if section.settings.pagination -%}
-        <div class="swiper-pagination"></div>
-      {%- endif -%}
+          <div class="sldier-controls">
+            {%- if section.settings.navigation -%}
+              <div class="swiper-button swiper-prev">
+                <span class="svg-wrapper">
+                  {{ 'slider-arrow-left.svg' | inline_asset_content }}
+                </span>
+              </div>
+            {% endif %}
+            {%- if section.settings.pagination_scrollbar == 'pagination' -%}
+              <div class="swiper-pagination"></div>
+            {%- endif -%}
+            {%- if section.settings.pagination_scrollbar == 'scrollbar' -%}
+              <div class="swiper-scrollbar"></div>
+            {%- endif -%}
+            {%- if section.settings.navigation -%}
+              <div class="swiper-button swiper-next">
+                <span class="svg-wrapper">
+                  {{ 'slider-arrow-right.svg' | inline_asset_content }}
+                </span>
+              </div>
+            {% endif %}
+            {% if section.settings.image_shape == 'arch' %}
+              {{ 'mask-arch.svg' | inline_asset_content }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       {% if section.settings.image_shape == 'arch' %}
         {{ 'mask-arch.svg' | inline_asset_content }}
       {%- endif -%}
