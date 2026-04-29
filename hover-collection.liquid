@@ -1,0 +1,410 @@
+{% style %}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mob }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mob }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+    .lb-split-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: {{ section.settings.border_radius }}px;
+    overflow: hidden;
+    background: rgb(var(--color-background));
+  }
+
+  .lb-left-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .lb-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .lb-title {
+    font-size: 45px;
+    color: rgb(var(--color-foreground));
+    margin: 0;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+
+  .lb-number {
+    font-weight: 400;
+    opacity: 0.4;
+    color: rgb(var(--color-foreground));
+    margin-left: 6px;
+    margin: 0px;
+    transition: opacity 0.3s ease;
+  }
+
+  .lb-list-item.active .lb-title,
+  .lb-list-item:hover .lb-title {
+    opacity: 1;
+  }
+
+  .lb-list-item.active .lb-number,
+  .lb-list-item:hover .lb-number {
+    opacity: 1;
+  }
+
+  .lb-right-image {
+    position: relative;
+    width: 100%;
+    background: rgb(var(--color-background));
+    overflow: hidden;
+  }
+
+  .lb-right-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+
+  .lb-media {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lb-media.adapt {
+    height: auto;
+  }
+
+  .lb-media.square {
+    padding-bottom: 100%;
+  }
+
+  .lb-media.portrait {
+    padding-bottom: 130%;
+  }
+
+  .lb-media.landscape {
+    padding-bottom: 70%;
+  }
+
+  .lb-media.square img,
+  .lb-media.portrait img,
+  .lb-media.landscape img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lb-image-caption {
+    position: absolute;
+    bottom: 22px;
+    left: 22px;
+    right: 22px;
+    color: rgba(0,0,0,0.65);
+    text-align: center;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+
+  .lb-stacked-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .lb-stacked-img.active {
+    opacity: 1;
+  }
+
+  .lb-media {
+    position: relative;
+  }
+
+  .lb-media.adapt {
+    min-height: 300px;
+  }
+
+  @media screen and (max-width: 990px) {
+    .lb-split-wrapper {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .lb-left-content {
+      gap: 16px;
+    }
+    .lb-title {
+      font-size: 30px;
+    }
+    .lb-list-item {
+      gap: 6px;
+    }
+  }
+{% endstyle %}
+
+<div class="lb-split-main-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="lb-split-section page-width" id="lb-section-{{ section.id }}">
+    <div class="lb-split-wrapper">
+      <div class="lb-left-content">
+        {% for block in section.blocks %}
+          {% if block.type == 'collection_item' %}
+            {% assign col = block.settings.collection %}
+            {% assign custom_image = block.settings.custom_image %}
+            {% assign final_image_url = blank %}
+
+            {% if custom_image != blank %}
+              {% assign final_image_url = custom_image | image_url: width: 1600 %}
+            {% elsif col != blank and col.featured_image != blank %}
+              {% assign final_image_url = col.featured_image | image_url: width: 1600 %}
+            {% endif %}
+
+            {% assign product_count = 0 %}
+            {% if col != blank %}
+              {% assign product_count = col.all_products_count %}
+            {% endif %}
+
+            <div
+              class="lb-list-item {% if forloop.first %}active{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              data-image="{{ final_image_url }}"
+              data-url="{% if col != blank %}{{ col.url }}{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <h2 class="lb-title">
+                {% if col != blank %}
+                  {{ col.title }}
+                {% else %}
+                  Collection Title
+                {% endif %}
+              </h2>
+
+              <h5 class="lb-number">
+                {% if block.settings.manual_count != blank %}
+                  {{ block.settings.manual_count }}
+                {% else %}
+                  {{ product_count }}
+                {% endif %}
+              </h5>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="lb-right-image">
+        <div class="lb-media {{ section.settings.image_ratio }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {% for block in section.blocks %}
+            {% if block.type == 'collection_item' %}
+              {% assign col = block.settings.collection %}
+              {% assign custom_image = block.settings.custom_image %}
+              {% assign img_url = blank %}
+
+              {% if custom_image != blank %}
+                {% assign img_url = custom_image | image_url: width: 1600 %}
+              {% elsif col != blank and col.featured_image != blank %}
+                {% assign img_url = col.featured_image | image_url: width: 1600 %}
+              {% endif %}
+
+              <div class="lb-stacked-img{% if forloop.first %} active{% endif %}">
+              {% if img_url != blank %}
+                <img
+                  class=""
+                  src="{{ img_url }}"
+                  data-block="{{ block.id }}"
+                  alt="{% if col != blank %}{{ col.title }}{% else %}Collection Image{% endif %}"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                  width=""
+                  height=""
+                >
+              {% else %}
+                {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% if section.settings.caption != blank %}
+          <div class="lb-image-caption">{{ section.settings.caption }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('#lb-section-{{ section.id }}');
+    if (!section) return;
+
+    const items = section.querySelectorAll('.lb-list-item');
+    const stackedImgs = section.querySelectorAll('.lb-stacked-img');
+    const placeholder = section.querySelector('#lbPlaceholder-{{ section.id }}');
+
+    if (!items.length) return;
+
+    items.forEach((item, index) => {
+      item.addEventListener('mouseenter', function () {
+        items.forEach((i) => i.classList.remove('active'));
+        item.classList.add('active');
+
+        stackedImgs.forEach((img) => img.classList.remove('active'));
+
+        if (stackedImgs[index]) {
+          stackedImgs[index].classList.add('active');
+          if (placeholder) placeholder.style.display = 'none';
+        } else {
+          if (placeholder) placeholder.style.display = 'flex';
+        }
+      });
+
+      item.addEventListener('click', function () {
+        const url = item.getAttribute('data-url');
+        if (url && url.trim() !== '') window.location.href = url;
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collections Hover Split",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image Ratio",
+      "default": "adapt",
+      "options": [
+        { "value": "adapt", "label": "Adapt (Original)" },
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "landscape", "label": "Landscape" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Image Caption (Optional)",
+      "default": "LeBag PARIS"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border Radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mob",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mob",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Collection Item",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (Optional)",
+          "info": "If empty, it will use collection featured image."
+        },
+        {
+          "type": "text",
+          "id": "manual_count",
+          "label": "Manual Count (Optional)",
+          "info": "If empty, it will show collection product count automatically."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Hover Split",
+      "blocks": [
+        { "type": "collection_item" },
+        { "type": "collection_item" },
+        { "type": "collection_item" },
+        { "type": "collection_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}
