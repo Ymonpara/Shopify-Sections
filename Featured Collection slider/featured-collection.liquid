@@ -111,15 +111,18 @@
     </div>
 
     <div class="swiper slider-mobile-gutter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-       data-slidesperview="{{ section.settings.columns_desktop }}" 
-       data-spacebetween="{{ section.settings.space_slide }}" 
-       {%- if section.settings.autoplay == true -%}
-         data-autoplay="true" 
-         data-autoplay-delay="{{ section.settings.auto_speed_delay }}" 
-       {% endif %}
-       data-loop="{{ section.settings.loop }}"
-       data-mobileSlides="{{ section.settings.columns_mobile }}"
-       data-speed="{%- if section.settings.transition_speed != blank -%}{{ section.settings.transition_speed }}{%- else -%}500{%- endif -%}"
+       {% if section.settings.enable_slider %}
+        data-slidesperview="{{ section.settings.columns_desktop }}"
+        data-spacebetween="{{ section.settings.space_slide }}"
+        {%- if section.settings.autoplay == true -%}
+          data-autoplay="true"
+          data-autoplay-delay="{{ section.settings.auto_speed_delay }}"
+        {% endif %}
+        data-loop="{{ section.settings.loop }}"
+        data-tabletSlides= "3"
+        data-mobileSlides="{{ section.settings.columns_mobile }}"
+        data-speed="{%- if section.settings.transition_speed != blank -%}{{ section.settings.transition_speed }}{%- else -%}500{%- endif -%}"
+        {% endif %}
       >
       <ul
         id="Slider-{{ section.id }}"
